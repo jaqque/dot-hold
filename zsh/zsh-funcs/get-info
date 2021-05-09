@@ -1,0 +1,12 @@
+#!/usr/bin/env zsh
+
+# https://apple.stackexchange.com/questions/410743/how-to-trigger-get-info-for-file-using-command-line
+
+__FILE="$1"
+
+if [[ -r "${__FILE}" ]]; then
+  osascript <<EOF
+set aFile to (POSIX file "$__FILE") as alias
+tell application "Finder" to open information window of aFile
+EOF
+fi

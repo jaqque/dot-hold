@@ -1,0 +1,12 @@
+# Friendly messages for $?
+
+# use subshell, since declaring e as local sets $? to 0
+#
+ok () {
+  local e=$?
+  case $e in
+    0) printf 'ok.\n' ;;
+    *) printf 'Failed (%d)\n' $e ;;
+  esac
+  return $e
+}

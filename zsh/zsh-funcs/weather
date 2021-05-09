@@ -1,0 +1,6 @@
+# Stolen from sirhc, 2017-06-19 #kernel-panic
+
+# Usage: weather san diego, us
+# TODO: Find some way to increase width of terminal, minimum is 125
+
+curl -s "http://wttr.in/${*// /+}"

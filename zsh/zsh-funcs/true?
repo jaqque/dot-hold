@@ -1,0 +1,10 @@
+# return on success of previous command
+#
+'true?' () (
+      local e=$?
+      case $e in
+         (0) print 'Works for me.' ;;
+         (*) print 'No dice.' ;;
+      esac
+      exit $e
+)

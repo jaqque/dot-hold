@@ -1,0 +1,12 @@
+#!/usr/bin/env zsh
+# Keep a running total
+
+local t_temp
+t_temp=$t
+while [[ -n $1 ]]
+do
+  t_temp=$(( t_temp + ${1//,} ))
+  shift
+done
+t=$t_temp
+print $t

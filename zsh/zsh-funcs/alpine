@@ -1,0 +1,52 @@
+#!/usr/bin/env zsh
+
+local docker_args docker_interactive exit_status highlight hostname image name shell
+local status_color=cyan
+local success_color=cyan
+local failure_color=red
+
+typeset -a docker_args docker_interactive
+
+image="${0##*/}"
+hostname="${image/:/}"
+docker_interactive=(--interactive --tty)
+
+case $image in
+  alpine) shell=/bin/sh ;;
+  *) shell=/bin/bash ;;
+esac
+
+while [[ "$1" ]]; do
+  case $1 in
+    --) shift; break ;;
+    :*) image=$image$1; shift ;;
+    --name) name=$2; shift 2 ;;
+    --hostname) hostname=$2; shift 2 ;;
+    -d|--detach) unset docker_interactive; docker_args+=($1); shift ;;
+    --help) echo "Use \"docker container --help\" for help. Don't ask me.";
+            exit 1 ;;
+    -i|--interactive|-t|--tty) shift ;;
+    --init \
+      |--no-healthcheck \
+      |--oom-kill-disable \
+      |--privileged \
+      |--read-only \
+      |--rm \
+      |--sig-proxy) docker_args+=($1); shift ;;
+    -*) docker_args+=($1 $2); shift 2 ;;
+    *) break ;;
+  esac
+done
+
+if [[ -z $name ]]; then
+  name="$hostname-${1:+${1##*/}-}$(date +%Y-%m-%d-%H.%M.%S)"
+fi
+
+docker_args+=($docker_interactive)
+
+print -P "%F{$status_color}==>%f $name"
+docker run --name $name --hostname $hostname $docker_args $image ${@-$shell};
+exit_status=$?
+(( exit_status )) && highlight=$failure_color || highlight=$success_color
+print -P "%F{$highlight}<==%f $name"
+return $exit_status

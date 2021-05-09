@@ -1,0 +1,7 @@
+#!/usr/bin/env zsh
+
+add-zsh-hook -d precmd grml_vcs_to_screen_title
+add-zsh-hook -d preexec grml_maintain_name
+add-zsh-hook -d preexec grml_cmd_to_screen_title
+add-zsh-hook -d preexec grml_control_xterm_title
+printf '\e]0;%s\a' "$*"

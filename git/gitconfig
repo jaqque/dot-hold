@@ -1,0 +1,64 @@
+[user]
+	signingkey = 6FE413326DC4B226
+[create]
+	host = siduri
+	path = src/projects
+	track = origin
+[color]
+	ui = auto
+[core]
+	#autocrlf = input
+	#excludesfile = $HOME/.gitignore
+	editor=vim -i NONE
+
+[alias]
+	st = status --untracked-files=no --short
+	lol = log --graph --pretty=oneline --abbrev-commit
+	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ci) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --all
+	wdiff = diff --color-words
+	tags = log --oneline --decorate --tags --no-walk
+	incoming = log ..@{upstream}
+	outgoing = log @{upstream}..
+
+[merge]
+	keepBackup = false;
+	tool = Kaleidoscope
+[mergetool "p4merge"]
+	cmd = p4merge "$BASE" "$LOCAL" "$REMOTE" "$MERGED"
+	keepTemporaries = false
+	trustExitCode = false
+	keepBackup = false
+[diff]
+	tool = Kaleidoscope
+[difftool "p4merge"]
+	cmd = p4merge "$LOCAL" "$REMOTE"
+	keepTemporaries = false
+	trustExitCode = false
+	keepBackup = false
+[difftool]
+	prompt = false
+
+[push]
+	default = simple
+
+[credential]
+	helper = cache --timeout=3600
+[filter "lfs"]
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+[commit]
+	verbose = true
+[diff "ansible-vault"]
+	textconv = ansible-vault view
+[mergetool "Kaleidoscope"]
+	cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
+	trustexitcode = true
+[difftool "Kaleidoscope"]
+	cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
+[mergetool]
+	keepBackup = true
+	prompt = false
+[init]
+	defaultBranch = main

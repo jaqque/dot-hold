@@ -1,0 +1,13 @@
+#!/usr/bin/env zsh
+# Command line math
+#
+# I would love to make an alias '='='noglob =', but I can't find a way
+# to escape the alias definition to make it work.
+
+= () {
+  print $(( ${@//,} ))
+}
+
+# set the alias by paramter (it took so long to find this 2020-01-03)
+aliases[=]='noglob ='
+= "$@"
